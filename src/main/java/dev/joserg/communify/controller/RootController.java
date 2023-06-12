@@ -6,18 +6,20 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 @RequiredArgsConstructor
 public class RootController {
 
     @GetMapping("/public")
-    public JwtAuthenticationToken publicResource(JwtAuthenticationToken jwtAuthenticationToken) {
-        return jwtAuthenticationToken;
+    public Map<String, Object> publicResource(JwtAuthenticationToken jwtAuthenticationToken) {
+        return jwtAuthenticationToken.getTokenAttributes();
     }
 
     @GetMapping("/private")
     @PreAuthorize("hasAuthority('SCOPE_Root.Private')")
-    public JwtAuthenticationToken privateResource(JwtAuthenticationToken jwtAuthenticationToken) {
-        return jwtAuthenticationToken;
+    public Map<String, Object> privateResource(JwtAuthenticationToken jwtAuthenticationToken) {
+        return jwtAuthenticationToken.getTokenAttributes();
     }
 }
