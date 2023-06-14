@@ -17,3 +17,6 @@ jobs:
           cache: 'gradle'
       - name: Build
         run: ./gradlew clean build
+        env:
+          ISSUER_URI: ${{ secrets.ISSUER_URI }}
+          JWK_SET_URI: ${{ secrets.JWK_SET_URI }}
