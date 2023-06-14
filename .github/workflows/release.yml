@@ -14,7 +14,10 @@ jobs:
           components: 'native-image'
           cache: 'gradle'
       - name: Build and publish image
-        run: ./gradlew bootBuildImage --imageName josergdev.azurecr.io/communify:test1 --publishImage
+        run: |
+          gradle properties -q | grep "name:" | awk '{print $2}' >> $PROJECT_NAME
+          gradle properties -q | grep "version:" | awk '{print $2}' >> $PROJECT_VERSION
+          ./gradlew bootBuildImage --imageName ${{ secrets.REGISTRY_HOST }}/${{ env.PROJECT_NAME }}:${{ env.PROJECT_VERSION }} --publishImage
         env:
           ISSUER_URI: ${{ secrets.ISSUER_URI }}
           JWK_SET_URI: ${{ secrets.JWK_SET_URI }}
