@@ -1,16 +1,18 @@
 name: Release
 
-on:
-  workflow_dispatch:
-    inputs:
-      input:
-        description: "Test"
-        required: false
-        default: "World"
+on: [ workflow_dispatch ]
 
 jobs:
-  job1:
+  BuildAndPublishImage:
     runs-on: ubuntu-latest
     steps:
-      - run: echo Hello ${{ github.event.inputs.input }}
+      - uses: actions/checkout@v3
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          version: 'latest'
+          java-version: '17'
+          components: 'native-image'
+          cache: 'gradle'
+      - name: Build and publish image
+        run: ./gradlew bootBuildImage --imageName josergdev.azurecr.io/communify:test1 --publishImage
 
