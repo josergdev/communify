@@ -15,8 +15,8 @@ jobs:
           cache: 'gradle'
       - name: Build and publish image
         run: |
-          gradle properties -q | grep "name:" | awk '{print $2}' >> $PROJECT_NAME
-          gradle properties -q | grep "version:" | awk '{print $2}' >> $PROJECT_VERSION
+          echo "PROJECT_NAME=$(gradle properties -q | grep "name:" | awk '{print $2}')" >> $GITHUB_ENV
+          echo "PROJECT_VERSION=$(gradle properties -q | grep "version:" | awk '{print $2}')" >> $GITHUB_ENV
           ./gradlew bootBuildImage --imageName ${{ secrets.REGISTRY_HOST }}/${{ env.PROJECT_NAME }}:${{ env.PROJECT_VERSION }} --publishImage
         env:
           ISSUER_URI: ${{ secrets.ISSUER_URI }}
