@@ -15,4 +15,9 @@ jobs:
           cache: 'gradle'
       - name: Build and publish image
         run: ./gradlew bootBuildImage --imageName josergdev.azurecr.io/communify:test1 --publishImage
+        env:
+          ISSUER_URI: ${{ secrets.ISSUER_URI }}
+          JWK_SET_URI: ${{ secrets.JWK_SET_URI }}
+          REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
+          REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
 
