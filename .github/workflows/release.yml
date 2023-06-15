@@ -14,10 +14,7 @@ jobs:
           components: 'native-image'
           cache: 'gradle'
       - name: Build and publish image
-        run: |
-          echo "PROJECT_NAME=$(gradle properties -q | grep "name:" | awk '{print $2}')" >> $GITHUB_ENV
-          echo "PROJECT_VERSION=$(gradle properties -q | grep "version:" | awk '{print $2}')" >> $GITHUB_ENV
-          ./gradlew bootBuildImage --imageName ${{ secrets.REGISTRY_HOST }}/${{ env.PROJECT_NAME }}:${{ env.PROJECT_VERSION }} --publishImage
+        run: ./gradlew bootBuildImage --publishImage
         env:
           ISSUER_URI: ${{ secrets.ISSUER_URI }}
           JWK_SET_URI: ${{ secrets.JWK_SET_URI }}

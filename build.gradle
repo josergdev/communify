@@ -35,6 +35,7 @@ tasks.named('test') {
 }
 
 tasks.named('bootBuildImage') {
+    imageName = "${System.getenv('REGISTRY_HOST') ?: ''}/${project.name}:${project.version}"
     docker {
         publishRegistry {
             username = System.getenv('REGISTRY_USERNAME')
