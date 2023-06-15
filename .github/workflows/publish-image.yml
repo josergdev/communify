@@ -1,9 +1,9 @@
-name: Release
+name: Publish image
 
 on: [ workflow_dispatch ]
 
 jobs:
-  BuildAndPublishImage:
+  publish-image:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
