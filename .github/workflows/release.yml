@@ -14,6 +14,5 @@ jobs:
           java-version: '17'
           components: 'native-image'
           cache: 'gradle'
-          github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Release
         run: ./gradlew release -Prelease.useAutomaticVersion=true
