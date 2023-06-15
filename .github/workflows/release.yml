@@ -1,0 +1,14 @@
+name: Release
+
+on: [ workflow_dispatch ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Release
+        run: ./gradlew release
+        env:
+          ISSUER_URI: ${{ secrets.ISSUER_URI }}
+          JWK_SET_URI: ${{ secrets.JWK_SET_URI }}
