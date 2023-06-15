@@ -1,0 +1,45 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.1.0'
+    id 'io.spring.dependency-management' version '1.1.0'
+    id 'net.researchgate.release' version '3.0.2'
+    id 'org.graalvm.buildtools.native' version '0.9.20'
+}
+
+group = 'dev.joserg'
+sourceCompatibility = '17'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    annotationProcessor 'org.projectlombok:lombok'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+bootBuildImage {
+    imageName = "${System.getenv('REGISTRY_HOST') ?: ''}/${project.name}:${project.version}"
+    docker {
+        publishRegistry {
+            username = System.getenv('REGISTRY_USERNAME')
+            password = System.getenv('REGISTRY_PASSWORD')
+        }
+    }
+}

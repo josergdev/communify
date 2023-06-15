@@ -1,0 +1,24 @@
+name: Publish image
+
+on: [ workflow_dispatch ]
+
+jobs:
+  publish-image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          version: 'latest'
+          java-version: '17'
+          components: 'native-image'
+          cache: 'gradle'
+      - name: Build and publish image
+        run: ./gradlew bootBuildImage --publishImage
+        env:
+          ISSUER_URI: ${{ secrets.ISSUER_URI }}
+          JWK_SET_URI: ${{ secrets.JWK_SET_URI }}
+          REGISTRY_HOST: ${{ secrets.REGISTRY_HOST }}
+          REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
+          REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+
