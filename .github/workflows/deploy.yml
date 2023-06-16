@@ -10,3 +10,14 @@ jobs:
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Get current tag
+        run: echo CURRENT_TAG=$(git describe --tags --abbrev=0) >> $GITHUB_ENV
+        
+      - name: Build and deploy Container App
+        uses: azure/container-apps-deploy-action@v1
+        with:
+          acrName: ${{ secrets.REGISTRY_HOST }}
+          containerAppName: ${{ secrets.AZURE_CONTAINER_APP }}
+          resourceGroup: ${{ secrets.AZURE_RESOURCE_GROUP }}
+          imageToDeploy: ${{ secrets.REGISTRY_HOST }}/communify:${{ env.CURRENT_TAG }}
