@@ -3,7 +3,7 @@ name: Deploy
 on: [ workflow_dispatch ]
 
 jobs:
-  release:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -19,7 +19,7 @@ jobs:
       - name: Build and deploy Container App
         uses: azure/container-apps-deploy-action@v1
         with:
-          acrName: ${{ secrets.REGISTRY_HOST }}
+          acrName: ${{ secrets.AZURE_REGISTRY }}
           containerAppName: ${{ secrets.AZURE_CONTAINER_APP }}
           resourceGroup: ${{ secrets.AZURE_RESOURCE_GROUP }}
           imageToDeploy: ${{ secrets.REGISTRY_HOST }}/communify:${{ env.CURRENT_TAG }}
