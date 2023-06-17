@@ -2,6 +2,10 @@ name: Release and deploy
 
 on: [ workflow_dispatch ]
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   release-deploy:
     runs-on: ubuntu-latest
@@ -14,6 +18,7 @@ jobs:
           version: 'latest'
           java-version: '17'
           components: 'native-image'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           cache: 'gradle'
       - name: Release
         run: ./gradlew release -Prelease.useAutomaticVersion=true
