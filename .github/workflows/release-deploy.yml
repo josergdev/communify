@@ -4,7 +4,7 @@ on: [ workflow_dispatch ]
 
 permissions:
   id-token: write
-  contents: read
+  contents: write
 
 jobs:
   release-deploy:
@@ -18,7 +18,6 @@ jobs:
           version: 'latest'
           java-version: '17'
           components: 'native-image'
-          github-token: ${{ secrets.GITHUB_TOKEN }}
           cache: 'gradle'
       - name: Release
         run: ./gradlew release -Prelease.useAutomaticVersion=true
