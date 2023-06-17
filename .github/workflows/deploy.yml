@@ -28,6 +28,6 @@ jobs:
         with:
           acrUsername: ${{ secrets.REGISTRY_USERNAME }}
           acrPassword: ${{ secrets.REGISTRY_PASSWORD }}
-          containerAppName: ${{ secrets.AZURE_CONTAINER_APP }}
-          resourceGroup: ${{ secrets.AZURE_RESOURCE_GROUP }}
+          containerAppName: communify
+          location: West Europe
           imageToDeploy: ${{ secrets.REGISTRY_HOST }}/communify:${{ env.CURRENT_TAG }}
