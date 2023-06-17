@@ -26,8 +26,6 @@ jobs:
       - name: Build and deploy Container App
         uses: azure/container-apps-deploy-action@v1
         with:
-          acrUsername: ${{ secrets.REGISTRY_USERNAME }}
-          acrPassword: ${{ secrets.REGISTRY_PASSWORD }}
           containerAppName: communify
           location: westeurope
           imageToDeploy: josergdev.azurecr.io/communify:${{ env.CURRENT_TAG }}
