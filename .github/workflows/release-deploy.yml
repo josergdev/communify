@@ -2,8 +2,12 @@ name: Release and deploy
 
 on: [ workflow_dispatch ]
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
-  release:
+  release-deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
