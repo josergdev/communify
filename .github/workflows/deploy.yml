@@ -30,4 +30,4 @@ jobs:
           acrPassword: ${{ secrets.REGISTRY_PASSWORD }}
           containerAppName: communify
           location: westeurope
-          imageToDeploy: ${{ secrets.REGISTRY_HOST }}/communify:${{ env.CURRENT_TAG }}
+          imageToDeploy: josergdev.azurecr.io/communify:${{ env.CURRENT_TAG }}
