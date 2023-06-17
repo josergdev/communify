@@ -26,13 +26,13 @@ jobs:
       - name: Build and deploy Container App
         uses: azure/container-apps-deploy-action@v1
         with:
-          resourceGroup: communify-rg
-          containerAppEnvironment: communify-env
-          containerAppName: communify
+          resourceGroup: ${{ secrets.AZURE_RESOURCE_GROUP }}
+          containerAppEnvironment: ${{ secrets.AZURE_CONTAINER_ENV }}
+          containerAppName: ${{ secrets.AZURE_CONTAINER_APP }}
           location: westeurope
           targetPort: 8080
-          registryUrl: josergdev.azurecr.io
+          registryUrl: ${{ secrets.REGISTRY_HOST }}
           acrUsername: ${{ secrets.REGISTRY_USERNAME }}
           acrPassword: ${{ secrets.REGISTRY_PASSSWORD }}
-          imageToDeploy: josergdev.azurecr.io/communify:${{ env.CURRENT_TAG }}
+          imageToDeploy: ${{ secrets.REGISTRY_HOST }}/${{ secrets.AZURE_CONTAINER_APP }}:${{ env.CURRENT_TAG }}
           environmentVariables: ISSUER_URI=${{ secrets.ISSUER_URI }} JWK_SET_URI=${{ secrets.JWK_SET_URI }}
