@@ -29,5 +29,5 @@ jobs:
           acrUsername: ${{ secrets.REGISTRY_USERNAME }}
           acrPassword: ${{ secrets.REGISTRY_PASSWORD }}
           containerAppName: communify
-          location: West Europe
+          location: westeurope
           imageToDeploy: ${{ secrets.REGISTRY_HOST }}/communify:${{ env.CURRENT_TAG }}
