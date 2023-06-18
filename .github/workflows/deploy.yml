@@ -1,0 +1,38 @@
+name: Deploy
+
+on: [ workflow_dispatch, workflow_call ]
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Log in to Azure
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Get current tag
+        run: echo CURRENT_TAG=$(git describe --tags --abbrev=0) >> $GITHUB_ENV
+        
+      - name: Build and deploy Container App
+        uses: azure/container-apps-deploy-action@v1
+        with:
+          resourceGroup: ${{ secrets.AZURE_RESOURCE_GROUP }}
+          containerAppEnvironment: ${{ secrets.AZURE_CONTAINER_ENV }}
+          containerAppName: ${{ secrets.AZURE_CONTAINER_APP }}
+          location: westeurope
+          targetPort: 8080
+          registryUrl: ${{ secrets.REGISTRY_HOST }}
+          acrUsername: ${{ secrets.REGISTRY_USERNAME }}
+          acrPassword: ${{ secrets.REGISTRY_PASSSWORD }}
+          imageToDeploy: ${{ secrets.REGISTRY_HOST }}/${{ secrets.AZURE_CONTAINER_APP }}:${{ env.CURRENT_TAG }}
+          environmentVariables: ISSUER_URI=${{ secrets.ISSUER_URI }} JWK_SET_URI=${{ secrets.JWK_SET_URI }}

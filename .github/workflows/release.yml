@@ -1,0 +1,18 @@
+name: Release
+
+on: [ workflow_dispatch, workflow_call ]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: fregante/setup-git-user@v2
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          version: 'latest'
+          java-version: '17'
+          components: 'native-image'
+          cache: 'gradle'
+      - name: Release
+        run: ./gradlew release -Prelease.useAutomaticVersion=true

@@ -1,0 +1,69 @@
+name: Release and deploy
+
+on:
+  workflow_dispatch:
+  pull_request_target:
+    branches:
+      - main
+    types:
+      - closed
+
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  release-deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v3
+      - uses: fregante/setup-git-user@v2
+      - uses: graalvm/setup-graalvm@v1
+        with:
+          version: 'latest'
+          java-version: '17'
+          components: 'native-image'
+          cache: 'gradle'
+      - name: Release
+        run: ./gradlew release -Prelease.useAutomaticVersion=true
+
+      - name: Get current tag
+        run: echo CURRENT_TAG=$(git describe --tags --abbrev=0) >> $GITHUB_ENV
+
+      - name: Checkout tag
+        run: git checkout ${{ env.CURRENT_TAG }}
+
+      - name: Build and publish image
+        run: ./gradlew bootBuildImage --publishImage
+        env:
+          ISSUER_URI: ${{ secrets.ISSUER_URI }}
+          JWK_SET_URI: ${{ secrets.JWK_SET_URI }}
+          REGISTRY_HOST: ${{ secrets.REGISTRY_HOST }}
+          REGISTRY_USERNAME: ${{ secrets.REGISTRY_USERNAME }}
+          REGISTRY_PASSWORD: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: Log in to Azure
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Build and deploy Container App
+        uses: azure/container-apps-deploy-action@v1
+        with:
+          resourceGroup: ${{ secrets.AZURE_RESOURCE_GROUP }}
+          containerAppEnvironment: ${{ secrets.AZURE_CONTAINER_ENV }}
+          containerAppName: ${{ secrets.AZURE_CONTAINER_APP }}
+          location: westeurope
+          targetPort: 8080
+          registryUrl: ${{ secrets.REGISTRY_HOST }}
+          acrUsername: ${{ secrets.REGISTRY_USERNAME }}
+          acrPassword: ${{ secrets.REGISTRY_PASSSWORD }}
+          imageToDeploy: ${{ secrets.REGISTRY_HOST }}/${{ secrets.AZURE_CONTAINER_APP }}:${{ env.CURRENT_TAG }}
+          environmentVariables: >
+            ISSUER_URI=${{ secrets.ISSUER_URI }} 
+            JWK_SET_URI=${{ secrets.JWK_SET_URI }}
+          
+      
