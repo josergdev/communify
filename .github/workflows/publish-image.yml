@@ -1,6 +1,6 @@
 name: Publish image
 
-on: [ workflow_dispatch ]
+on: [ workflow_dispatch, workflow_call ]
 
 jobs:
   publish-image:
