@@ -5,6 +5,12 @@ spring:
         jwt:
           issuer-uri: ${ISSUER_URI}
           jwk-set-uri: ${JWK_SET_URI}
+  
+  datasource:
+    url: ${DATASOURCE_URL}
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
+  
   jpa:
     hibernate:
       ddl-auto: update
