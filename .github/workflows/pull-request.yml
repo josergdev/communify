@@ -7,6 +7,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - uses: isbang/compose-action@v1.5.1
+        with:
+          compose-file: "./compose.yml"
       - uses: graalvm/setup-graalvm@v1
         with:
           version: 'latest'
