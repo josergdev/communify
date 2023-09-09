@@ -18,6 +18,7 @@ spring:
 #      hibernate:
 #        dialect: org.hibernate.dialect.PostgreSQLDialect
 
+
 patreon:
   client-id: ${PATREON_CLIENT_ID}
   client-secret: ${PATREON_CLIENT_SECRET}
