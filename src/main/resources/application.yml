@@ -8,15 +8,16 @@ spring:
   
   datasource:
     url: ${DATASOURCE_URL}
-    username: ${DATASOURCE_USERNAME}
-    password: ${DATASOURCE_PASSWORD}
+  #    username: ${DATASOURCE_USERNAME}
+  #    password: ${DATASOURCE_PASSWORD}
   
   jpa:
     hibernate:
       ddl-auto: update
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
+#    properties:
+#      hibernate:
+#        dialect: org.hibernate.dialect.PostgreSQLDialect
+
 
 patreon:
   client-id: ${PATREON_CLIENT_ID}
